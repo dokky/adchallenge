@@ -2,20 +2,22 @@ package controllers
 
 import javax.inject._
 
-import ad.challenge.model.SubscriptionManagementModel.SubscriptionOrder
+import ad.challenge.model.SubscriptionManagementModel._
+import ad.challenge.model.SubscriptionManagementModelReads._
 import play.api._
 import play.api.http.ContentTypes
+import play.api.libs.json.JsValue
 import play.api.mvc._
 import services._
 
 import scala.concurrent.Future
-
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class SubscriptionManagementController @Inject()(oauth: OAuthSecurityService,
                                                  subscriptionManagement: SubscriptionManagementService,
-                                                 eventRetrieverService: EventRetrieverService,
-                                                 marshalling: EventMarshallingService) extends Controller with ControllerHelper with Logging {
+                                                 eventRetrieverService: EventRetrieverService)
+  extends Controller with ControllerHelper with Logging {
 
   def ping = Action {
     Ok("pong")
@@ -31,24 +33,23 @@ class SubscriptionManagementController @Inject()(oauth: OAuthSecurityService,
     }
   }
 
+  import scalaz.OptionT._
+  import scalaz.Scalaz._
 
   def create(eventUrl: String) = SecuredAsyncAction {
-    for {
-      eventJson <- eventRetrieverService.retrievePayload(eventUrl)
-      subscriptionOrder <- marshalling.unmarshal[SubscriptionOrder](eventJson.get) // todo remove .get
-      accountIdentifier: String = subscriptionManagement.process(subscriptionOrder)
-    } yield accountIdentifier map {
-//      case id: String => accountCreated(id)
-//      case e: Error => error(e)
-      case _ => error("bla", "bla")
+    (for {
+      subscriptionOrder <- optionT(eventRetrieverService.retrieveEvent[SubscriptionOrder](eventUrl))
+      accountIdentifier <- optionT(subscriptionManagement.process(subscriptionOrder))
+    } yield accountIdentifier).run map {
+      case Some(id: String) => accountCreatedResponse(id)
+      case None => error("bla", "Failed to process request")
     }
-
   }
 
   def cancel(eventUrl: String) = play.mvc.Results.TODO
 
 
-  private def accountCreated(id: String): Result =
+  private def accountCreatedResponse(id: String): Result =
     Ok(
       s"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
           |<result>
@@ -57,7 +58,6 @@ class SubscriptionManagementController @Inject()(oauth: OAuthSecurityService,
           |  <accountIdentifier>$id</accountIdentifier>
           |</result>""".stripMargin
     ).as(ContentTypes.XML)
-
 
 
 }

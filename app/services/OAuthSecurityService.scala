@@ -2,7 +2,7 @@ package services
 
 import java.net.URLDecoder
 import java.util
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import org.asynchttpclient.oauth.OAuthSignatureCalculator
 import org.asynchttpclient.uri.Uri
@@ -17,6 +17,7 @@ object SignatureValidationResult extends Enumeration {
   val VALID, NOT_VALID = Value
 }
 
+@Singleton
 class OAuthSecurityService  @Inject() (configuration: Configuration)  {
 
   private val oAuthConsumerKey = configuration.getString("ad.OAuthConsumerKey").get

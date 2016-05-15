@@ -16,6 +16,7 @@ object MainBuild extends Build {
     .settings(buildSettings: _*)
     .settings(
       libraryDependencies ++= Seq(
+	      Libraries.scalaz,
 	      Libraries.playWebServices,
 	      Libraries.cassandra,
         Libraries.scalaTestPlusForPlay

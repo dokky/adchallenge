@@ -27,7 +27,7 @@ object SubscriptionManagementModel {
 
 }
 
-trait SubscriptionManagementModelReads {
+object SubscriptionManagementModelReads {
   import play.api.libs.json._
   import play.api.libs.functional.syntax._
   import ad.challenge.model.SubscriptionManagementModel._
