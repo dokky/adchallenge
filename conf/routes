@@ -12,3 +12,5 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET    /subscription/create         controllers.SubscriptionManagementController.create(eventUrl: String)
 GET    /subscription/cancel         controllers.SubscriptionManagementController.cancel(eventUrl: String)
+GET    /subscription/change         controllers.SubscriptionManagementController.change(eventUrl: String)
+GET    /subscription/status         controllers.SubscriptionManagementController.status(eventUrl: String)

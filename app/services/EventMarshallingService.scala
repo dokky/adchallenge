@@ -9,7 +9,7 @@ class EventMarshallingService extends Logging {
     jsonEvent.validate[T] match {
       case s:JsSuccess[T] => Some(s.get)
       case e:JsError =>
-        logger.error(s"could not unmarshal event from json: $jsonEvent: " + JsError.toJson(e.errors))
+        logger.error(s"could not unmarshal event from json:\n $jsonEvent\n Errors:\n" + JsError.toJson(e.errors))
         None
     }
 

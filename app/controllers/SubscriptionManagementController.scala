@@ -25,6 +25,7 @@ class SubscriptionManagementController @Inject()(oauth: OAuthSecurityService,
 
 
   private def SecuredAsyncAction(block: => Future[Result]) = Action.async { implicit request =>
+    logger.info(s"inspecting incoming request $request")
     oauth.checkOAuthSignature(request) match {
       case SignatureValidationResult.VALID => block
       case SignatureValidationResult.NOT_VALID =>
@@ -46,7 +47,17 @@ class SubscriptionManagementController @Inject()(oauth: OAuthSecurityService,
     }
   }
 
-  def cancel(eventUrl: String) = play.mvc.Results.TODO
+  def cancel(eventUrl: String) = SecuredAsyncAction {
+    Future.successful(error("NOT_IMPLEMENTED", "Comming soon"))
+  }
+
+  def change(eventUrl: String) = SecuredAsyncAction {
+    Future.successful(error("NOT_IMPLEMENTED", "Comming soon"))
+  }
+
+  def status(eventUrl: String) = SecuredAsyncAction {
+    Future.successful(error("NOT_IMPLEMENTED", "Comming soon"))
+  }
 
 
   private def accountCreatedResponse(id: String): Result =

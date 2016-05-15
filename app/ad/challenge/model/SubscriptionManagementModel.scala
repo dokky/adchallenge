@@ -15,7 +15,11 @@ object SubscriptionManagementModel {
 
   case class Order(edition: String, pricingDuration: String, items: Option[Seq[OrderItem]])
 
-  case class EventMetadata(product: String, kind: String, flag: Option[String], marketplace: Marketplace)
+
+
+//  EVENTS
+
+  case class EventMetadata(flag: Option[String], marketplace: Marketplace)
 
   abstract class Event(val meta: EventMetadata)
 
@@ -23,6 +27,8 @@ object SubscriptionManagementModel {
 
   case class SubscriptionCancel(override final val meta: EventMetadata, account: Account) extends Event(meta)
 
+
+//  ERROR
   case class Error(code: String, message: String)
 
 }
@@ -71,18 +77,20 @@ object SubscriptionManagementModelReads {
       (__ \ "items").readNullable[Seq[OrderItem]]
     ) (Order.apply _)
 
+
+
+  //  EVENTS
+
   implicit val eventMetadataReads: Reads[EventMetadata] = (
-    (__ \ "product").read[String] ~
-      (__ \ "" \ "type").read[String] ~
-      (__ \ "" \ "flag").readNullable[String] ~
-      (__ \ "" \ "marketplace").read[Marketplace]
+      (__ \ "flag").readNullable[String] ~
+      (__ \ "marketplace").read[Marketplace]
     ) (EventMetadata.apply _)
 
   implicit val subscriptionOrderReads: Reads[SubscriptionOrder] = (
     __.read[EventMetadata] ~
-      (__ \ "" \ "creator").read[User] ~
-      (__ \ "" \ "" \ "company").read[Company] ~
-      (__ \ "" \ "" \ "order").read[Order]
+      (__ \ "creator").read[User] ~
+      (__ \ "payload" \ "company").read[Company] ~
+      (__ \ "payload" \ "order").read[Order]
     ) (SubscriptionOrder.apply _)
 
 
