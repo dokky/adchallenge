@@ -1,9 +1,9 @@
 import javax.inject.Inject
 
-import ad.challenge.model.SubscriptionManagementModel.SubscriptionOrder
+import ad.challenge.model.MarketplaceEventModel.SubscriptionOrderEvent
 import org.scalatestplus.play._
 import play.api.libs.json.Json
-import services.{EventMarshallingService, Logging, OAuthSecurityService}
+import ad.challenge.services.{EventMarshallingService, Logging, OAuthSecurityService}
 
 class MarshallingSpec extends PlaySpec with OneAppPerTest {
 
@@ -69,9 +69,9 @@ class MarshallingSpec extends PlaySpec with OneAppPerTest {
           |
         """.stripMargin
 
-      import ad.challenge.model.SubscriptionManagementModelReads._
-      val orderO = marshalling.unmarshal[SubscriptionOrder](Json.parse(event))
-      orderO mustBe Some(SubscriptionOrder(_,_,_,_))
+      import ad.challenge.model.MarketplaceEventModelReads._
+      val orderO = marshalling.unmarshal[SubscriptionOrderEvent](Json.parse(event))
+      orderO mustBe Some(SubscriptionOrderEvent(_,_,_,_))
       val order = orderO.get
       order.meta.marketplace mustBe Some("ACME")
     }

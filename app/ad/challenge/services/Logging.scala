@@ -1,4 +1,5 @@
-package services
+package ad.challenge.services
+
 import play.api.Logger
 
 trait Logging {

@@ -1,9 +1,10 @@
-package services
+package ad.challenge.services
 
 import java.net.URLDecoder
 import java.util
 import javax.inject.{Inject, Singleton}
 
+import ad.challenge.services.AuthenticationResult.AuthenticationResult
 import org.asynchttpclient.oauth.OAuthSignatureCalculator
 import org.asynchttpclient.uri.Uri
 import org.asynchttpclient.util.Utf8UrlEncoder
@@ -12,13 +13,8 @@ import play.api.Configuration
 import play.api.libs.oauth.{ConsumerKey, RequestToken}
 import play.api.libs.ws.WSSignatureCalculator
 
-object SignatureValidationResult extends Enumeration {
-  type SignatureValidationResult = Value
-  val VALID, NOT_VALID = Value
-}
-
 @Singleton
-class OAuthSecurityService  @Inject() (configuration: Configuration)  {
+class OAuthSecurityService @Inject()(configuration: Configuration) extends AuthenticationService {
 
   private val oAuthConsumerKey = configuration.getString("ad.OAuthConsumerKey").get
   private val oAuthConsumerSecret = configuration.getString("ad.OAuthConsumerSecret").get
@@ -45,14 +41,12 @@ class OAuthSecurityService  @Inject() (configuration: Configuration)  {
 
     def calculateSignature(method: String, uri: Uri, oauthTimestamp: Long, nonce: String, formParams: util.List[Param], queryParams: util.List[Param]) =
       calculator.calculateSignature(method, uri, oauthTimestamp, nonce, formParams, queryParams)
-    }
+  }
 
 
   private val authRegex = ".*oauth_nonce=\"([^\"]*)\".*oauth_signature=\"([^\"]*)\".*oauth_timestamp=\"([^\"]*)\".*".r
 
-  import services.SignatureValidationResult.SignatureValidationResult
-
-  def checkOAuthSignature[T] (implicit request: play.api.mvc.Request[T]): SignatureValidationResult =
+  def checkAuthentication[T](implicit request: play.api.mvc.Request[T]): AuthenticationResult =
     request.headers.get(OAuthSignatureCalculator.HEADER_AUTHORIZATION) match {
       case Some(authorizationHeader) =>
 
@@ -70,10 +64,10 @@ class OAuthSecurityService  @Inject() (configuration: Configuration)  {
               new util.ArrayList(),
               scala.collection.JavaConversions.seqAsJavaList(params)
             )
-            if (expectedSignature.equals(URLDecoder.decode(providedSignature, "UTF-8"))) SignatureValidationResult.VALID else SignatureValidationResult.VALID // todo: hack always valid if wellformed
-          case _ => SignatureValidationResult.NOT_VALID
+            if (expectedSignature.equals(URLDecoder.decode(providedSignature, "UTF-8"))) AuthenticationResult.VALID else AuthenticationResult.VALID // todo: hack always valid if wellformed
+          case _ => AuthenticationResult.NOT_VALID
         }
-      case None => SignatureValidationResult.NOT_VALID
+      case None => AuthenticationResult.NOT_VALID
     }
 
 }

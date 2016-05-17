@@ -1,4 +1,4 @@
-package services
+package ad.challenge.services
 
 import javax.inject.{Inject, Singleton}
 
@@ -6,13 +6,12 @@ import play.api.http.ContentTypes
 import play.api.libs.json.{JsValue, Reads}
 import play.api.libs.ws.WSClient
 import play.mvc.Http.HeaderNames
-import play.api.libs.oauth.{ConsumerKey, OAuthCalculator, RequestToken}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
-class EventRetrieverService @Inject() (ws: WSClient, oauth: OAuthSecurityService, marshalling: EventMarshallingService) extends Logging {
+class EventRetrieverService @Inject()(ws: WSClient, oauth: OAuthSecurityService, marshalling: EventMarshallingService) extends Logging {
 
   def retrievePayload(eventUrl: String): Future[Option[JsValue]] = {
     val result = ws.url(eventUrl)
@@ -32,7 +31,7 @@ class EventRetrieverService @Inject() (ws: WSClient, oauth: OAuthSecurityService
     result
   }
 
-  def retrieveEvent[T<: ad.challenge.model.SubscriptionManagementModel.Event](eventUrl: String)(implicit reads: Reads[T]): Future[Option[T]] = {
+  def retrieveEvent[T <: ad.challenge.model.MarketplaceEventModel.MarketplaceEvent](eventUrl: String)(implicit reads: Reads[T]): Future[Option[T]] = {
     val result = retrievePayload(eventUrl)
     result.map(_.flatMap(marshalling.unmarshal[T]))
   }
