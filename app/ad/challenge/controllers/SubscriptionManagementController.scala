@@ -14,10 +14,6 @@ class SubscriptionManagementController @Inject()(oauth: OAuthSecurityService,
                                                  subscriptionManagement: SubscriptionManagementService)
   extends Controller with ControllerHelper with Logging {
 
-  def ping = Action {
-    Ok("pong")
-  }
-
   def create(eventUrl: String) = SecuredAsyncAction(oauth) {
     subscriptionManagement.processSubscriptionOrderEvent(eventUrl) map {
       case Some(id: String) => accountCreatedResponse(id)

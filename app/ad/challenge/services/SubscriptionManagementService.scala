@@ -4,9 +4,13 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
 import ad.challenge.model.MarketplaceEventModel.SubscriptionOrderEvent
+import ad.challenge.model.MarketplaceEventModelReads._
 
 import scala.concurrent.Future
 import scalaz.OptionT._
+import scalaz.Scalaz._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
 @Singleton

@@ -2,15 +2,16 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
-GET     /                           controllers.ADChallengeSampleWebAppController.index
-# An example controller showing how to use dependency injection
-GET     /ping                       controllers.SubscriptionManagementController.ping
+# A sample app page
+GET     /                           ad.challenge.controllers.ADChallengeSampleWebAppController.index
+
+# app heartbeat 
+GET     /ping                       ad.challenge.controllers.HeartbeatController.ping
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-GET    /subscription/create         controllers.SubscriptionManagementController.create(eventUrl: String)
-GET    /subscription/cancel         controllers.SubscriptionManagementController.cancel(eventUrl: String)
-GET    /subscription/change         controllers.SubscriptionManagementController.change(eventUrl: String)
-GET    /subscription/status         controllers.SubscriptionManagementController.status(eventUrl: String)
+GET    /subscription/create         ad.challenge.controllers.SubscriptionManagementController.create(eventUrl: String)
+GET    /subscription/cancel         ad.challenge.controllers.SubscriptionManagementController.cancel(eventUrl: String)
+GET    /subscription/change         ad.challenge.controllers.SubscriptionManagementController.change(eventUrl: String)
+GET    /subscription/status         ad.challenge.controllers.SubscriptionManagementController.status(eventUrl: String)

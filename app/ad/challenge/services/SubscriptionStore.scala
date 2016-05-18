@@ -1,8 +1,10 @@
 package ad.challenge.services
 
-/**
-  * Created by stanislavd on 17/05/2016.
-  */
+import java.util.UUID
+
+import ad.challenge.model.MarketplaceModel.{Company, User, Order}
+import ad.challenge.model.SubscriptionManagementModel._
+
 object SubscriptionStore {
 
   def create(creator: User, company: Company, order: Order): Subscription = Subscription(UUID.randomUUID().toString, subscriptionStatus = SubscriptionStatus.ACTIVE)
