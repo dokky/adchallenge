@@ -11,7 +11,14 @@ GET     /ping                       ad.challenge.controllers.HeartbeatController
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
+
+## Subscription Management
 GET    /subscription/create         ad.challenge.controllers.SubscriptionManagementController.create(eventUrl: String)
 GET    /subscription/cancel         ad.challenge.controllers.SubscriptionManagementController.cancel(eventUrl: String)
 GET    /subscription/change         ad.challenge.controllers.SubscriptionManagementController.change(eventUrl: String)
 GET    /subscription/notice         ad.challenge.controllers.SubscriptionManagementController.notice(eventUrl: String)
+
+## User Assignment Management
+GET    /user/assign                 ad.challenge.controllers.UserAssignmentManagementController.assign(eventUrl: String)
+GET    /user/unassign               ad.challenge.controllers.UserAssignmentManagementController.unassign(eventUrl: String)
+GET    /user/update                 ad.challenge.controllers.UserAssignmentManagementController.update(eventUrl: String)
