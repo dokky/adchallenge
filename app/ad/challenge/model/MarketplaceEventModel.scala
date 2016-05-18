@@ -1,21 +1,44 @@
 package ad.challenge.model
 
+
+import ad.challenge.model.ErrorCode.ErrorCode
+import ad.challenge.model.EventFlag.EventFlag
 import ad.challenge.model.MarketplaceEventModel.{EventMetadata, SubscriptionOrderEvent}
 import ad.challenge.model.MarketplaceModel._
 
+object EventFlag extends Enumeration {
+  type EventFlag = Value
+  val STATELESS, NONE = Value
+}
+
+object ErrorCode extends Enumeration {
+  type ErrorCode = Value
+  val UNAUTHORIZED,
+  NOT_IMPLEMENTED,
+  UNKNOWN_ERROR,
+  NONE
+  = Value
+}
 
 object MarketplaceEventModel {
 
-  case class EventMetadata(flag: Option[String], marketplace: Marketplace)
+  case class EventMetadata(flag: Option[EventFlag], marketplace: Marketplace)
 
-  abstract class MarketplaceEvent(val meta: EventMetadata)
+  sealed trait MarketplaceEvent {
+    val meta: EventMetadata
+  }
 
-  case class SubscriptionOrderEvent(override final val meta: EventMetadata, creator: User, company: Company, order: Order) extends MarketplaceEvent(meta)
+  case class SubscriptionOrderEvent(meta: EventMetadata, creator: User, company: Company, order: Order) extends MarketplaceEvent
 
-  case class SubscriptionCancelEvent(override final val meta: EventMetadata, account: Account) extends MarketplaceEvent(meta)
+  case class SubscriptionCancelEvent(meta: EventMetadata, account: Account) extends MarketplaceEvent
 
-  //  ERROR
-  case class Error(code: String, message: String)
+  case class SubscriptionNoticeEvent(meta: EventMetadata, account: Account, notice: Notice) extends MarketplaceEvent
+
+  case class SubscriptionChangeEvent(meta: EventMetadata, account: Account, order: Order) extends MarketplaceEvent
+
+  case class ResponseEvent(errorCode: ErrorCode = ErrorCode.NONE, message: Option[String] = None) {
+    def success = errorCode == ErrorCode.NONE
+  }
 
 }
 
@@ -28,8 +51,10 @@ object MarketplaceEventModelReads {
 
   //  EVENTS
 
+  implicit val eventFlagReads = Reads.enumNameReads(EventFlag)
+
   implicit val eventMetadataReads: Reads[EventMetadata] = (
-    (__ \ "flag").readNullable[String] ~
+    (__ \ "flag").readNullable[EventFlag] ~
       (__ \ "marketplace").read[Marketplace]
     ) (EventMetadata.apply _)
 

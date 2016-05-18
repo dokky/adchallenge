@@ -14,4 +14,4 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET    /subscription/create         ad.challenge.controllers.SubscriptionManagementController.create(eventUrl: String)
 GET    /subscription/cancel         ad.challenge.controllers.SubscriptionManagementController.cancel(eventUrl: String)
 GET    /subscription/change         ad.challenge.controllers.SubscriptionManagementController.change(eventUrl: String)
-GET    /subscription/status         ad.challenge.controllers.SubscriptionManagementController.status(eventUrl: String)
+GET    /subscription/notice         ad.challenge.controllers.SubscriptionManagementController.notice(eventUrl: String)

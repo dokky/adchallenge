@@ -1,5 +1,11 @@
 package ad.challenge.model
 
+import ad.challenge.model.AccountStatus.AccountStatus
+
+object AccountStatus extends Enumeration {
+  type AccountStatus = Value
+  val ACTIVE, CANCELLED = Value
+}
 
 object MarketplaceModel {
 
@@ -9,12 +15,13 @@ object MarketplaceModel {
 
   case class User(id: String, firstName: Option[String] = None, lastName: Option[String] = None, email: Option[String] = None, phone: Option[String] = None, language: Option[String] = None)
 
-  case class Account(id: String, status: Option[String])
+  case class Account(id: String, status: Option[AccountStatus])
 
   case class OrderItem(unit: String, quantity: Int)
 
   case class Order(edition: String, pricingDuration: String, items: Option[Seq[OrderItem]])
 
+  case class Notice(noticeType: String)
 }
 
 
@@ -47,9 +54,11 @@ object MarketplaceModelReads {
       (__ \ "language").readNullable[String]
     ) (User.apply _)
 
+  implicit val accountStatusReads = Reads.enumNameReads(AccountStatus)
+
   implicit val accountReads: Reads[Account] = (
     (__ \ "accountIdentifier").read[String] ~
-      (__ \ "status").readNullable[String]
+      (__ \ "status").readNullable[AccountStatus]
     ) (Account.apply _)
 
   implicit val itemReads: Reads[OrderItem] = (

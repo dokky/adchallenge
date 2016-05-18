@@ -2,35 +2,45 @@ package ad.challenge.controllers
 
 import javax.inject._
 
+import ad.challenge.model.ErrorCode
 import ad.challenge.services._
 import play.api.http.ContentTypes
 import play.api.mvc._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 @Singleton
 class SubscriptionManagementController @Inject()(oauth: OAuthSecurityService,
                                                  subscriptionManagement: SubscriptionManagementService)
   extends Controller with ControllerHelper with Logging {
 
+
   def create(eventUrl: String) = SecuredAsyncAction(oauth) {
     subscriptionManagement.processSubscriptionOrderEvent(eventUrl) map {
-      case Some(id: String) => accountCreatedResponse(id)
-      case None => error("bla", "Failed to process request")
+      case Some(account) => accountCreatedResponse(account.id)
+      case None => error(ErrorCode.UNKNOWN_ERROR, "Failed to process request")
     }
   }
 
   def cancel(eventUrl: String) = SecuredAsyncAction(oauth) {
-    Future.successful(error("NOT_IMPLEMENTED", "Comming soon"))
+    subscriptionManagement.processSubscriptionCancelEvent(eventUrl) map {
+      case Some(event) => response(event)
+      case None => error(ErrorCode.UNKNOWN_ERROR, "Failed to process request")
+    }
   }
 
   def change(eventUrl: String) = SecuredAsyncAction(oauth) {
-    Future.successful(error("NOT_IMPLEMENTED", "Comming soon"))
+    subscriptionManagement.processSubscriptionChangeEvent(eventUrl) map {
+      case Some(event) => response(event)
+      case None => error(ErrorCode.UNKNOWN_ERROR, "Failed to process request")
+    }
   }
 
-  def status(eventUrl: String) = SecuredAsyncAction(oauth) {
-    Future.successful(error("NOT_IMPLEMENTED", "Comming soon"))
+  def notice(eventUrl: String) = SecuredAsyncAction(oauth) {
+    subscriptionManagement.processSubscriptionNoticeEvent(eventUrl) map {
+      case Some(event) => response(event)
+      case None => error(ErrorCode.UNKNOWN_ERROR, "Failed to process request")
+    }
   }
 
 

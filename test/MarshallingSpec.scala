@@ -1,9 +1,9 @@
-import javax.inject.Inject
-
-import ad.challenge.model.MarketplaceEventModel.SubscriptionOrderEvent
+import ad.challenge.model.EventFlag
+import ad.challenge.model.MarketplaceEventModel._
+import ad.challenge.model.MarketplaceModel._
+import ad.challenge.services.EventMarshallingService
 import org.scalatestplus.play._
 import play.api.libs.json.Json
-import ad.challenge.services.{EventMarshallingService, Logging, OAuthSecurityService}
 
 class MarshallingSpec extends PlaySpec with OneAppPerTest {
 
@@ -71,9 +71,38 @@ class MarshallingSpec extends PlaySpec with OneAppPerTest {
 
       import ad.challenge.model.MarketplaceEventModelReads._
       val orderO = marshalling.unmarshal[SubscriptionOrderEvent](Json.parse(event))
-      orderO mustBe Some(SubscriptionOrderEvent(_,_,_,_))
-      val order = orderO.get
-      order.meta.marketplace mustBe Some("ACME")
+      orderO mustBe Some(
+        SubscriptionOrderEvent(
+          EventMetadata(
+            Some(EventFlag.STATELESS),
+            Marketplace("ACME", "https://acme.appdirect.com")
+          )
+          ,
+          User(
+            "ec5d8eda-5cec-444d-9e30-125b6e4b67e2",
+            Some("DummyCreatorFirst"),
+            Some("DummyCreatorLast"),
+            Some("test-email+creator@appdirect.com"),
+            None,
+            Some("fr")
+          ),
+          Company(
+            "d15bb36e-5fb5-11e0-8c3c-00262d2cda03",
+            Some("Example Company Name"),
+            Some("company-email@example.com"),
+            Some("CA"),
+            Some("4155551212"),
+            Some("http://www.example.com")
+          )
+          ,
+          Order(
+            "BASIC",
+            "MONTHLY",
+            Some(List(
+              OrderItem("USER", 10),
+              OrderItem("MEGABYTE", 15)
+            )))
+        ))
     }
 
   }
