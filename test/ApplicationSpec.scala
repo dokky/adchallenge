@@ -19,12 +19,12 @@ class ApplicationSpec extends PlaySpec with OneAppPerTest {
 
   "HomeController" should {
 
-    "render the index page" in {
+    "forbid access to the index page to unauthorized users" in {
       val home = route(app, FakeRequest(GET, "/")).get
 
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include("You are user number 1")
+      status(home) mustBe UNAUTHORIZED
+//      contentType(home) mustBe Some("text/html")
+//      contentAsString(home) must include("You are user number 1")
     }
 
   }

@@ -15,17 +15,17 @@
 
 Phases to achieve certain results and control scope   
 
-## Phase I
+## [+] Phase I
 One app (Distribution)
 * Interface: REST backed by Play Framework (Scala)
 * Persistence in memory
 * Business Logic: Hello world page via Play
 
-## Phase II
+## [+] Phase II
 One app (Distribution + OAuth)
 * OAuth provider for Play
 
-## Phase III
+## [+] Phase III
 One app (Distribution + OAuth + Users)
 * New Apis
 
