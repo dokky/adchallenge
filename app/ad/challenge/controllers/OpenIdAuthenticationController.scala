@@ -16,7 +16,7 @@ class OpenIdAuthenticationController @Inject()(openIdClient: OpenIdClient, users
 
 
   def login(openIdUrl: String) = Action.async { implicit request =>
-    val callbackUrl = "login"
+    val callbackUrl = routes.OpenIdAuthenticationController.verify.absoluteURL()
     val realmUrl = routes.ADChallengeSampleWebAppController.index.absoluteURL()
 
     openIdClient.redirectURL(openIdUrl, callbackUrl, realm = Some(realmUrl))
