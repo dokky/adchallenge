@@ -1,6 +1,6 @@
-package ad.challenge.services
+package ad.challenge.services.security
 
-import ad.challenge.services.AuthenticationResult.AuthenticationResult
+import ad.challenge.services.security.AuthenticationResult.AuthenticationResult
 
 object AuthenticationResult extends Enumeration {
   type AuthenticationResult = Value

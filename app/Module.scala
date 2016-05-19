@@ -1,6 +1,6 @@
 import ad.challenge.model._
 import ad.challenge.services.persistense.inmemory._
-import ad.challenge.services.{AuthenticationService, OAuthSecurityService}
+import ad.challenge.services.security.{OAuthSecurityService, AuthenticationService}
 import com.google.inject.AbstractModule
 
 class Module extends AbstractModule {

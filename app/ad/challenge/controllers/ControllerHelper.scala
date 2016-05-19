@@ -2,9 +2,9 @@ package ad.challenge.controllers
 
 import ad.challenge.model.ErrorCode
 import ad.challenge.model.ErrorCode.ErrorCode
-import ad.challenge.model.ErrorCode.ErrorCode
 import ad.challenge.model.MarketplaceEventModel.ResponseEvent
-import ad.challenge.services.{AuthenticationResult, AuthenticationService, Logging}
+import ad.challenge.services.security.{AuthenticationResult, AuthenticationService}
+import ad.challenge.services.Logging
 import play.api.http.ContentTypes
 import play.api.mvc.Results._
 import play.api.mvc.{Action, Result, Results}

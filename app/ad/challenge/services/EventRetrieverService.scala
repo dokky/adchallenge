@@ -2,6 +2,7 @@ package ad.challenge.services
 
 import javax.inject.{Inject, Singleton}
 
+import ad.challenge.services.security.OAuthSecurityService
 import play.api.http.ContentTypes
 import play.api.libs.json.{JsValue, Reads}
 import play.api.libs.ws.WSClient

@@ -1,10 +1,10 @@
-package ad.challenge.services
+package ad.challenge.services.security
 
 import java.net.URLDecoder
 import java.util
 import javax.inject.{Inject, Singleton}
 
-import ad.challenge.services.AuthenticationResult.AuthenticationResult
+import ad.challenge.services.security.AuthenticationResult.AuthenticationResult
 import org.asynchttpclient.oauth.OAuthSignatureCalculator
 import org.asynchttpclient.uri.Uri
 import org.asynchttpclient.util.Utf8UrlEncoder

@@ -1,6 +1,6 @@
-package ad.challenge.services
+package ad.challenge.services.security
 
-import ad.challenge.services.AuthenticationResult.AuthenticationResult
+import ad.challenge.services.security.AuthenticationResult.AuthenticationResult
 import play.api.mvc.Request
 
 class DisabledAuthenticationService extends AuthenticationService {

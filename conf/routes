@@ -20,7 +20,6 @@ GET    /subscription/notice         ad.challenge.controllers.SubscriptionManagem
 ## User Assignment Management
 GET    /user/assign                 ad.challenge.controllers.UserAssignmentManagementController.assign(eventUrl: String)
 GET    /user/unassign               ad.challenge.controllers.UserAssignmentManagementController.unassign(eventUrl: String)
-GET    /user/update                 ad.challenge.controllers.UserAssignmentManagementController.update(eventUrl: String)
 
 ## OpenID Authentication
 GET    /auth/login                  ad.challenge.controllers.OpenIdAuthenticationController.login(openIdUrl: String)

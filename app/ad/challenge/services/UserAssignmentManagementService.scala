@@ -24,9 +24,5 @@ class UserAssignmentManagementService @Inject()(eventRetrieverService: EventRetr
     Future.successful(Some(ResponseEvent()))
   }
 
-  def processUserUpdateEvent(eventUrl: String): Future[Option[ResponseEvent]] = {
-    Future.successful(Some(ResponseEvent()))
-  }
-
 
 }
