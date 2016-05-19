@@ -7,9 +7,9 @@ trait Users {
 
   def findById(id: String): Option[User]
 
-  def findByOpenId(openId: String)(): Option[User]
+  def findByOpenId(openId: String): Option[User]
 
-  def findByCompanyId(companyId: Long): Seq[User]
+  def findByCompanyId(companyId: Long): Iterable[User]
 
   def save(user: User): User
 
@@ -20,8 +20,6 @@ trait Users {
 trait Companies {
 
   def findById(id: String): Option[Company]
-
-  def findByUuId(uuid: String): Seq[Company]
 
   def save(company: Company): Company
 

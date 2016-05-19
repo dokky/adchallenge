@@ -80,6 +80,8 @@ class MarshallingSpec extends PlaySpec with OneAppPerTest {
           ,
           User(
             "ec5d8eda-5cec-444d-9e30-125b6e4b67e2",
+            "https://www.appdirect.com/openid/id/ec5d8eda-5cec-444d-9e30-125b6e4b67e2",
+            None,
             Some("DummyCreatorFirst"),
             Some("DummyCreatorLast"),
             Some("test-email+creator@appdirect.com"),

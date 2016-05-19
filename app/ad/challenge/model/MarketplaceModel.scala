@@ -13,7 +13,15 @@ object MarketplaceModel {
 
   case class Company(id: String, name: Option[String], email: Option[String], country: Option[String], phone: Option[String], website: Option[String])
 
-  case class User(id: String, firstName: Option[String] = None, lastName: Option[String] = None, email: Option[String] = None, phone: Option[String] = None, language: Option[String] = None)
+  case class User(id: String,
+                  openId: String,
+                  companyId: Option[String] = None,
+                  firstName: Option[String] = None,
+                  lastName: Option[String] = None,
+                  email: Option[String] = None,
+                  phone: Option[String] = None,
+                  language: Option[String] = None
+                  )
 
   case class Account(id: String, status: Option[AccountStatus])
 
@@ -47,6 +55,8 @@ object MarketplaceModelReads {
 
   implicit val userReads: Reads[User] = (
     (__ \ "uuid").read[String] ~
+      (__ \ "openId").read[String] ~
+      (__ \ "companyId").readNullable[String] ~
       (__ \ "firstName").readNullable[String] ~
       (__ \ "lastName").readNullable[String] ~
       (__ \ "email").readNullable[String] ~

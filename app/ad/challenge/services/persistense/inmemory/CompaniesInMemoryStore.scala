@@ -2,14 +2,19 @@ package ad.challenge.services.persistense.inmemory
 
 import ad.challenge.model.Companies
 import ad.challenge.model.MarketplaceModel.Company
+import scala.collection.JavaConverters._
+import scala.language.postfixOps
 
 class CompaniesInMemoryStore extends Companies {
 
-  override def findById(id: String): Option[Company] = None
+  val companies = new java.util.concurrent.ConcurrentHashMap[String, Company] asScala
 
-  override def findByUuId(uuid: String): Seq[Company] = Seq()
+  override def findById(id: String): Option[Company] = companies.get(id)
 
-  override def delete(company: Company) = {}
+  override def delete(company: Company): Unit = companies.remove(company.id)
 
-  override def save(company: Company): Company = company
+  override def save(company: Company): Company = {
+    companies.put(company.id, company)
+    company
+  }
 }
