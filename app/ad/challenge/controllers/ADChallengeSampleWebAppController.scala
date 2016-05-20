@@ -23,7 +23,8 @@ class ADChallengeSampleWebAppController @Inject()(users: Users,  companies: Comp
     val result = for {
       openId <- request.session.get("openId")
       user <- users.findByOpenId(openId)
-      company <- companies.findById(user.id)
+      companyId <- user.companyId
+      company <- companies.findById(companyId)
       account <- accounts.findById(company.id)
     } yield Ok(views.html.index(s"AD Challenge Sample Web App. User: $user, Company: $company, Account: $account"))
 
