@@ -16,6 +16,8 @@ object ErrorCode extends Enumeration {
   val UNAUTHORIZED,
   NOT_IMPLEMENTED,
   UNKNOWN_ERROR,
+  USER_NOT_FOUND,
+  ACCOUNT_NOT_FOUND,
   NONE
   = Value
 }

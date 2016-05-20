@@ -15,7 +15,7 @@ class UsersInMemoryStore extends Users {
 
   override def findByOpenId(openId: String): Option[User] = users.values.find(_.openId == openId)
 
-  override def delete(user: User): Unit = {users.remove(user.id)}
+  override def delete(user: User): Option[User] = {users.remove(user.id)}
 
   override def findByCompanyId(companyId: String): Iterable[User] = users.values.filter(_.companyId == companyId)
 

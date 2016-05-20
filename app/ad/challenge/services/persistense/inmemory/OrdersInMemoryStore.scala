@@ -10,4 +10,9 @@ class OrdersInMemoryStore extends Orders {
     orders.add(order)
     order
   }
+
+  override def update(order: Order): Option[Order] = {
+    orders.add(order)
+    Some(order)
+  }
 }

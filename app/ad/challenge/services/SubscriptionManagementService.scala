@@ -65,29 +65,60 @@ class SubscriptionManagementService @Inject()(eventRetrieverService: EventRetrie
 
   private def process(event: SubscriptionCancelEvent): Future[Option[ResponseEvent]] = StatelessEventSupport(event) {
     val result = event match {
-      case SubscriptionCancelEvent(_, account) =>
-
-        val c = companies.findById(account.id)
-        c.foreach({ company =>
-          for (user <- users.findByCompanyId(company.id))
-            users.delete(user)
-
-          companies.delete(company)
-        }
-        )
-        accounts.delete(account)
-        ResponseEvent()
-
+      case SubscriptionCancelEvent(_, account) => cancelAccount(account)
     }
-    Future.successful(Some(result))
+
+    Future.successful(Some(result match {
+      case Some(account) => ResponseEvent()
+      case None => ResponseEvent(ErrorCode.ACCOUNT_NOT_FOUND, Some("Account not found"))
+    }))
+
+  }
+
+  private def cancelAccount(account: Account): Option[Account] = {
+    companies.findByAccount(account).foreach({ company =>
+      for (user <- users.findByCompanyId(company.id))
+        users.delete(user)
+
+      companies.delete(company)
+    }
+    )
+    accounts.delete(account)
   }
 
   private def process(event: SubscriptionChangeEvent): Future[Option[ResponseEvent]] = StatelessEventSupport(event) {
-    Future.successful(Some(ResponseEvent()))
+    val result = event match {
+      case SubscriptionChangeEvent(_, account, order) =>
+
+        for {
+          a <- accounts.findById(account.id)
+          c <- companies.findByAccount(a)
+          o <- orders.update(order)
+        } yield a
+    }
+
+    Future.successful(Some(result match {
+      case Some(account) => ResponseEvent()
+      case None => ResponseEvent(ErrorCode.ACCOUNT_NOT_FOUND, Some("Account not found"))
+    }))
   }
 
   private def process(event: SubscriptionNoticeEvent): Future[Option[ResponseEvent]] = StatelessEventSupport(event) {
-    Future.successful(Some(ResponseEvent()))
+    val result = event match {
+      case SubscriptionNoticeEvent(_, account, notice) =>
+        accounts.findById(account.id).map { ac =>
+          notice match {
+            case Notice("DEACTIVATED") => accounts.save(ac.copy(status = Some(AccountStatus.SUSPENDED)))
+            case Notice("REACTIVATED") => accounts.save(ac.copy(status = Some(AccountStatus.ACTIVE)))
+            case Notice("CLOSED") => cancelAccount(ac)
+          }
+        }
+    }
+
+    Future.successful(Some(result match {
+      case Some(account) => ResponseEvent()
+      case None => ResponseEvent(ErrorCode.ACCOUNT_NOT_FOUND, Some("Account not found"))
+    }))
   }
 
 

@@ -13,17 +13,19 @@ trait Users {
 
   def save(user: User): User
 
-  def delete(user: User)
+  def delete(user: User): Option[User]
 
 }
 
 trait Companies {
 
+  def findByAccount(account: Account): Option[Company]
+
   def findById(id: String): Option[Company]
 
   def save(company: Company): Company
 
-  def delete(company: Company)
+  def delete(company: Company): Option[Company]
 
 }
 
@@ -34,12 +36,13 @@ trait Accounts {
 
   def save(account: Account): Account
 
-  def delete(account: Account)
+  def delete(account: Account): Option[Account]
 
 }
 
 trait Orders {
 
   def save(order: Order): Order
+  def update(order: Order): Option[Order]
 
 }
