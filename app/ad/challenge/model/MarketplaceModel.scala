@@ -4,7 +4,7 @@ import ad.challenge.model.AccountStatus.AccountStatus
 
 object AccountStatus extends Enumeration {
   type AccountStatus = Value
-  val ACTIVE, CANCELLED = Value
+  val ACTIVE, SUSPENDED, CANCELLED, FREE_TRIAL, FREE_TRIAL_EXPIRED = Value
 }
 
 object MarketplaceModel {

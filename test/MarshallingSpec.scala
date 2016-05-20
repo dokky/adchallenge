@@ -1,6 +1,6 @@
-import ad.challenge.model.EventFlag
 import ad.challenge.model.MarketplaceEventModel._
 import ad.challenge.model.MarketplaceModel._
+import ad.challenge.model.{AccountStatus, EventFlag}
 import ad.challenge.services.EventMarshallingService
 import org.scalatestplus.play._
 import play.api.libs.json.Json
@@ -105,6 +105,53 @@ class MarshallingSpec extends PlaySpec with OneAppPerTest {
               OrderItem("MEGABYTE", 15)
             )))
         ))
+    }
+
+    "parse json and unmarshal to an subscription notice event" in {
+      val event =
+        """
+          |{
+          |	"type": "SUBSCRIPTION_NOTICE",
+          |	"marketplace": {
+          |		"partner": "ACME",
+          |		"baseUrl": "https://acme.appdirect.com"
+          |	},
+          |	"applicationUuid": null,
+          |	"flag": "STATELESS",
+          |	"creator": null,
+          |	"payload": {
+          |		"user": null,
+          |		"company": null,
+          |		"account": {
+          |			"accountIdentifier": "dummy-account",
+          |			"status": "SUSPENDED",
+          |			"parentAccountIdentifier": null
+          |		},
+          |		"addonInstance": null,
+          |		"addonBinding": null,
+          |		"order": null,
+          |		"notice": {
+          |			"type": "DEACTIVATED",
+          |			"message": null
+          |		},
+          |		"configuration": {}
+          |	},
+          |	"returnUrl": null,
+          |	"links": []
+          |}
+        """.stripMargin
+
+      import ad.challenge.model.MarketplaceEventModelReads._
+      val orderO = marshalling.unmarshal[SubscriptionNoticeEvent](Json.parse(event))
+      orderO mustBe Some(
+        SubscriptionNoticeEvent(
+          EventMetadata(
+            Some(EventFlag.STATELESS),
+            Marketplace("ACME", "https://acme.appdirect.com")),
+          Account("dummy-account", Some(AccountStatus.SUSPENDED)),
+          Notice("DEACTIVATED"))
+      )
+
     }
 
   }

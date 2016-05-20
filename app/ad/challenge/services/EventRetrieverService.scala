@@ -3,6 +3,8 @@ package ad.challenge.services
 import javax.inject.{Inject, Singleton}
 
 import ad.challenge.services.security.OAuthSecurityService
+import ad.challenge.model.MarketplaceEventModel.MarketplaceEvent
+
 import play.api.http.ContentTypes
 import play.api.libs.json.{JsValue, Reads}
 import play.api.libs.ws.WSClient
@@ -33,7 +35,7 @@ class EventRetrieverService @Inject()(ws: WSClient, oauth: OAuthSecurityService,
     result
   }
 
-  def retrieveEvent[T <: ad.challenge.model.MarketplaceEventModel.MarketplaceEvent](eventUrl: String)(implicit reads: Reads[T]): Future[Option[T]] = {
+  def retrieveEvent[T <: MarketplaceEvent](eventUrl: String)(implicit reads: Reads[T]): Future[Option[T]] = {
     val result = retrievePayload(eventUrl)
     result.map(_.flatMap(marshalling.unmarshal[T]))
   }
