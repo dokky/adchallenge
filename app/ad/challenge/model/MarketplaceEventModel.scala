@@ -8,7 +8,7 @@ import ad.challenge.model.MarketplaceModel._
 
 object EventFlag extends Enumeration {
   type EventFlag = Value
-  val STATELESS, NONE = Value
+  val STATELESS, DEVELOPMENT, NONE = Value
 }
 
 object ErrorCode extends Enumeration {
