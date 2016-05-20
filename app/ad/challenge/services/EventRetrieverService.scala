@@ -22,6 +22,7 @@ class EventRetrieverService @Inject()(ws: WSClient, oauth: OAuthSecurityService,
       .map(
         response => response.status match {
           case 200 =>
+            logger.info(s"fetched event: ${response.body}")
             Some(response.json)
           case _ =>
             logger.error(s"$eventUrl returned [${response.status}] code")

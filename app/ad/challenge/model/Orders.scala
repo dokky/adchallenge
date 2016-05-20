@@ -9,7 +9,7 @@ trait Users {
 
   def findByOpenId(openId: String): Option[User]
 
-  def findByCompanyId(companyId: Long): Iterable[User]
+  def findByCompanyId(companyId: String): Iterable[User]
 
   def save(user: User): User
 

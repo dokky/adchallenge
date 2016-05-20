@@ -3,7 +3,7 @@ package ad.challenge.model
 
 import ad.challenge.model.ErrorCode.ErrorCode
 import ad.challenge.model.EventFlag.EventFlag
-import ad.challenge.model.MarketplaceEventModel.{EventMetadata, SubscriptionOrderEvent}
+import ad.challenge.model.MarketplaceEventModel._
 import ad.challenge.model.MarketplaceModel._
 
 object EventFlag extends Enumeration {
@@ -36,6 +36,10 @@ object MarketplaceEventModel {
 
   case class SubscriptionChangeEvent(meta: EventMetadata, account: Account, order: Order) extends MarketplaceEvent
 
+  case class UserAssignmentEvent(meta: EventMetadata, account: Account, user: User) extends MarketplaceEvent
+
+  case class UserUnassignmentEvent(meta: EventMetadata, account: Account, user: User) extends MarketplaceEvent
+
   case class ResponseEvent(errorCode: ErrorCode = ErrorCode.NONE, message: Option[String] = None) {
     def success = errorCode == ErrorCode.NONE
   }
@@ -64,5 +68,38 @@ object MarketplaceEventModelReads {
       (__ \ "payload" \ "company").read[Company] ~
       (__ \ "payload" \ "order").read[Order]
     ) (SubscriptionOrderEvent.apply _)
+
+  implicit val subscriptionCancelReads: Reads[SubscriptionCancelEvent] = (
+    __.read[EventMetadata] ~
+      (__ \ "payload" \ "account").read[Account]
+    ) (SubscriptionCancelEvent.apply _)
+
+  implicit val subscriptionChangeReads: Reads[SubscriptionChangeEvent] = (
+    __.read[EventMetadata] ~
+      (__ \ "payload" \ "account").read[Account] ~
+      (__ \ "payload" \ "order").read[Order]
+    ) (SubscriptionChangeEvent.apply _)
+
+  implicit val noticeReads: Reads[Notice] = (__ \ "type").read[String].map(Notice)
+
+  implicit val subscriptionNoticeReads: Reads[SubscriptionNoticeEvent] = (
+    __.read[EventMetadata] ~
+      (__ \ "payload" \ "account").read[Account] ~
+      (__ \ "payload" \ "notice").read[Notice]
+    ) (SubscriptionNoticeEvent.apply _)
+
+
+  implicit val userAssignmentEventReads: Reads[UserAssignmentEvent] = (
+    __.read[EventMetadata] ~
+      (__ \ "payload" \ "account").read[Account] ~
+      (__ \ "payload" \ "user").read[User]
+    ) (UserAssignmentEvent.apply _)
+
+  implicit val userUnassignmentEventReads: Reads[UserUnassignmentEvent] = (
+    __.read[EventMetadata] ~
+      (__ \ "payload" \ "account").read[Account] ~
+      (__ \ "payload" \ "user").read[User]
+    ) (UserUnassignmentEvent.apply _)
+
 
 }
