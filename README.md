@@ -69,23 +69,25 @@ Copy url like `https://e94ea19a.ngrok.io` and enter in AD product page
 * Edit Authentication: https://adchallenge-test.byappdirect.com/cms/editApp/115432?524765148#edit-authentication
 
 Urls should look like
-`
+
 Subscription management
-https://b48b493c.ngrok.io/subscription/create?eventUrl={eventUrl}
-https://b48b493c.ngrok.io/subscription/change?eventUrl={eventUrl}
-https://b48b493c.ngrok.io/subscription/cancel?eventUrl={eventUrl}
-https://b48b493c.ngrok.io/subscription/notice?eventUrl={eventUrl}
+
+    https://b48b493c.ngrok.io/subscription/create?eventUrl={eventUrl}
+    https://b48b493c.ngrok.io/subscription/change?eventUrl={eventUrl}
+    https://b48b493c.ngrok.io/subscription/cancel?eventUrl={eventUrl}
+    https://b48b493c.ngrok.io/subscription/notice?eventUrl={eventUrl}
 
 User assignment management
-https://b48b493c.ngrok.io/user/assign?eventUrl={eventUrl}
-https://b48b493c.ngrok.io/user/unassign?eventUrl={eventUrl}
+
+    https://b48b493c.ngrok.io/user/assign?eventUrl={eventUrl}
+    https://b48b493c.ngrok.io/user/unassign?eventUrl={eventUrl}
 
 Authentication
 
-https://b48b493c.ngrok.io/auth/login
-https://b48b493c.ngrok.io/*
+    https://b48b493c.ngrok.io/auth/login
+    https://b48b493c.ngrok.io/*
 
-`
+
 
 
 
